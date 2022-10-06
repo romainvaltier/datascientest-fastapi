@@ -19,3 +19,16 @@
 
 1. L'API devra aussi implémenter un point de terminaison pour vérifier que l'API est bien fonctionnelle.
 1. Permettre à un utilisateur **admin** dont le mot de passe est **4dm1N** de créer une nouvelle question.
+
+## Choix d'architecture
+
+1. Source de données pour les questions :
+
+```bash
+wget https://dst-de.s3.eu-west-3.amazonaws.com/fastapi_fr/questions.csv
+```
+
+1. Utilisation **async** par défaut pour anticiper les besoins de performance
+1. deux bases de données seront utilisées :
+    1. user_db
+    1. questions_db
