@@ -10,8 +10,10 @@
 6. Pour l'instant l'API utilise une authentification basique, à base de nom d'utilisateur et de mot de passe: la chaîne de caractères contenant Basic username:password devra être passée dans l'en-tête Authorization (en théorie, cette chaîne de caractère devrait être encodée mais pour simplifier l'exercice, on peut choisir de ne pas l'encoder)
 7. Pour les identifiants, on pourra utiliser le dictionnaire suivant:
 
-```{
+```
+{
   "alice": "wonderland",
   "bob": "builder",
   "clementine": "mandarine"
-}```
+}
+```
