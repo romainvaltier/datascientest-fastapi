@@ -1,6 +1,17 @@
 from fastapi import FastAPI
+import pandas as pd
 
 api = FastAPI()
+
+# user database
+user_db = {"alice": "wonderland", "bob": "builder", "clementine": "mandarine"}
+
+# questions database
+questions_db = pd.read_csv(
+    "https://dst-de.s3.eu-west-3.amazonaws.com/fastapi_fr/questions.csv",
+    sep=",",
+    header=0,
+)
 
 
 @api.get("/")
@@ -8,26 +19,6 @@ def get_index():
     return {"method": "get", "endpoint": "/"}
 
 
-@api.get("/other")
-def get_other():
+@api.get("/permissions")
+def get_permissions():
     return {"method": "get", "endpoint": "/other"}
-
-
-@api.post("/")
-def post_index():
-    return {"method": "post", "endpoint": "/"}
-
-
-@api.delete("/")
-def delete_index():
-    return {"method": "delete", "endpoint": "/"}
-
-
-@api.put("/")
-def put_index():
-    return {"method": "put", "endpoint": "/"}
-
-
-@api.patch("/")
-def patch_index():
-    return {"method": "patch", "endpoint": "/"}
