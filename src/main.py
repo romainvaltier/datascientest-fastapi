@@ -16,9 +16,4 @@ questions_db = pd.read_csv(
 
 @api.get("/")
 def get_index():
-    return {"method": "get", "endpoint": "/"}
-
-
-@api.get("/permissions")
-def get_permissions():
-    return {"method": "get", "endpoint": "/other"}
+    return {"data": "hello world"}
