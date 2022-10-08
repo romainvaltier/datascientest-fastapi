@@ -2,7 +2,7 @@
 
 ## Besoins
 
-1. L'application ou le navigateur Web, l'utilisateur doit pouvoir choisir un type de test (use) ainsi qu'une ou plusieurs catégories (subject).
+1. L'utilisateur doit pouvoir choisir un type de test (use) ainsi qu'une ou plusieurs catégories (subject).
 1. L'application peut produire des QCMs de 5, 10 ou 20 questions. L'API doit donc être en mesure de retourner ce nombre de questions.
 1. Comme l'application doit pouvoir générer de nombreux QCMs, les questions doivent être retournées dans un ordre aléatoire: ainsi, une requête avec les mêmes paramètres pourra retourner des questions différentes.
 1. Les utilisateurs devant avoir créé un compte, il faut que nous soyons en mesure de vérifier leurs identifiants.
