@@ -18,7 +18,7 @@ questions_db = pd.read_csv(
 
 @api.get("/")
 def get_index():
-    return {"data": "hello world"}
+    return {"grettings": "welcome"}
 
 
 @api.get("/users")
@@ -29,19 +29,41 @@ def get_users():
         return {}
 
 
-@api.get("/questions")
-def get_questions():
+@api.get("/use")
+def get_use():
     try:
-        return questions_db.to_json(orient="index", force_ascii=False)
+        return (
+            questions_db[["use", "subject"]]
+            .groupby(["use", "subject"])
+            .nunique()
+            .reset_index()
+            .to_dict(orient="records")
+        )
     except IndexError:
         return {}
 
 
-@api.get("/exam/{nb_of_quest:int}")
-def get_exam(nb_of_quest):
+@api.get("/questions")
+def get_questions():
     try:
-        return questions_db.sample(n=nb_of_quest).to_json(
-            orient="index", force_ascii=False
+        return questions_db.to_json(orient="records", force_ascii=False)
+    except IndexError:
+        return {}
+
+
+@api.get("/exam/{use}/subject/{subject}/nb/{nb:int}")
+def get_exam(use, subject, nb):
+    try:
+        subject_lst = list(subject.split(","))
+        questions_lst = questions_db[
+            (questions_db["use"] == use) & (questions_db["subject"].isin(subject_lst))
+        ]
+        if nb > len(questions_lst):
+            nb = len(questions_lst)
+        return (
+            questions_lst.sample(n=nb)
+            .reset_index()
+            .to_json(orient="records", force_ascii=False)
         )
     except IndexError:
         return {}
