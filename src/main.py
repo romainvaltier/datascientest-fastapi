@@ -35,3 +35,13 @@ def get_questions():
         return questions_db.to_json(orient="index", force_ascii=False)
     except IndexError:
         return {}
+
+
+@api.get("/exam/{nb_of_quest:int}")
+def get_exam(nb_of_quest):
+    try:
+        return questions_db.sample(n=nb_of_quest).to_json(
+            orient="index", force_ascii=False
+        )
+    except IndexError:
+        return {}
