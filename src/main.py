@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import asyncio
 from typing import Optional
 from pydantic import BaseModel
 import pandas as pd
@@ -18,12 +19,12 @@ questions_db.fillna("", inplace=True)
 
 
 @api.get("/")
-def get_index():
+async def get_index():
     return {"grettings": "Welcome!"}
 
 
 @api.get("/users")
-def get_users():
+async def get_users():
     try:
         return users_db
     except IndexError:
@@ -31,7 +32,7 @@ def get_users():
 
 
 @api.get("/use")
-def get_use():
+async def get_use():
     try:
         return (
             questions_db[["use", "subject"]]
@@ -45,15 +46,15 @@ def get_use():
 
 
 @api.get("/questions")
-def get_questions():
+async def get_questions():
     try:
         return questions_db.to_dict(orient="records")
     except IndexError:
         return {}
 
 
-@api.get("/exam/{use}/subject/{subject}/nb/{nb:int}")
-def get_exam(use, subject, nb):
+@api.get("/exam/{use:str}/subject/{subject:str}/nb/{nb:int}")
+async def get_exam(use, subject, nb):
     try:
         subject_lst = list(subject.split(","))
         questions_lst = questions_db[
