@@ -82,6 +82,6 @@ class Question(BaseModel):
 async def put_question(question: Question):
     try:
         questions_dict.append(question)
-        return questions_dict
+        return question
     except IndexError:
         return {}
