@@ -1,6 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import asyncio
-from typing import Optional
 from pydantic import BaseModel
 import pandas as pd
 
@@ -53,8 +52,8 @@ async def get_questions():
         return {}
 
 
-@api.get("/exam/{use:str}/subject/{subject:str}/nb/{nb:int}")
-async def get_exam(use, subject, nb):
+@api.get("/exam/{use}/subject/{subject}/nb/{nb}")
+async def get_exam(use: str, subject: str, nb: int):
     try:
         subject_lst = list(subject.split(","))
         questions_lst = questions_db[
