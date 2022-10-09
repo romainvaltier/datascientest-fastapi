@@ -14,11 +14,12 @@ questions_db = pd.read_csv(
     sep=",",
     header=0,
 )
+questions_db.fillna("", inplace=True)
 
 
 @api.get("/")
 def get_index():
-    return {"grettings": "welcome"}
+    return {"grettings": "Welcome!"}
 
 
 @api.get("/users")
@@ -46,7 +47,7 @@ def get_use():
 @api.get("/questions")
 def get_questions():
     try:
-        return questions_db.to_json(orient="records", force_ascii=False)
+        return questions_db.to_dict(orient="records")
     except IndexError:
         return {}
 
@@ -60,10 +61,6 @@ def get_exam(use, subject, nb):
         ]
         if nb > len(questions_lst):
             nb = len(questions_lst)
-        return (
-            questions_lst.sample(n=nb)
-            .reset_index()
-            .to_json(orient="records", force_ascii=False)
-        )
+        return questions_lst.sample(n=nb).to_dict(orient="records")
     except IndexError:
         return {}
