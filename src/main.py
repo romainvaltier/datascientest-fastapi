@@ -1,6 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from unittest import result
+from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 import asyncio
 from pydantic import BaseModel
+from typing import Optional, List
 import pandas as pd
 
 api = FastAPI()
@@ -15,6 +18,7 @@ questions_db = pd.read_csv(
     header=0,
 )
 questions_db.fillna("", inplace=True)
+questions_dict = questions_db.to_dict(orient="records")
 
 
 @api.get("/")
@@ -22,24 +26,18 @@ async def get_index():
     return {"grettings": "Welcome!"}
 
 
-@api.get("/users")
-async def get_users():
-    try:
-        return users_db
-    except IndexError:
-        return {}
-
-
 @api.get("/use")
 async def get_use():
     try:
-        return (
+        questions_db = pd.DataFrame(jsonable_encoder(questions_dict))
+        use_dict = (
             questions_db[["use", "subject"]]
             .groupby(["use", "subject"])
             .nunique()
             .reset_index()
             .to_dict(orient="records")
         )
+        return use_dict
     except IndexError:
         return {}
 
@@ -47,7 +45,7 @@ async def get_use():
 @api.get("/questions")
 async def get_questions():
     try:
-        return questions_db.to_dict(orient="records")
+        return questions_dict
     except IndexError:
         return {}
 
@@ -56,11 +54,34 @@ async def get_questions():
 async def get_exam(use: str, subject: str, nb: int):
     try:
         subject_lst = list(subject.split(","))
+        questions_db = pd.DataFrame(jsonable_encoder(questions_dict))
         questions_lst = questions_db[
             (questions_db["use"] == use) & (questions_db["subject"].isin(subject_lst))
         ]
         if nb > len(questions_lst):
             nb = len(questions_lst)
-        return questions_lst.sample(n=nb).to_dict(orient="records")
+        exam_dict = questions_lst.sample(n=nb).to_dict(orient="records")
+        return exam_dict
+    except IndexError:
+        return {}
+
+
+class Question(BaseModel):
+    question: str
+    subject: str
+    use: str
+    correct: str
+    responseA: str
+    responseB: str
+    responseC: str
+    responseD: Optional[str] = None
+    remark: Optional[str] = None
+
+
+@api.post("/question")
+async def put_question(question: Question):
+    try:
+        questions_dict.append(question)
+        return questions_dict
     except IndexError:
         return {}
