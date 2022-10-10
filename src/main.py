@@ -1,9 +1,7 @@
-from unittest import result
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
-import asyncio
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
 import pandas as pd
 
 api = FastAPI()
@@ -81,7 +79,7 @@ class Question(BaseModel):
 @api.post("/question")
 async def put_question(question: Question):
     try:
-        questions_dict.append(question)
+        questions_dict.append(jsonable_encoder(question))
         return question
     except IndexError:
         return {}
