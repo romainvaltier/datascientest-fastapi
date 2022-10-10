@@ -34,6 +34,17 @@ wget https://dst-de.s3.eu-west-3.amazonaws.com/fastapi_fr/questions.csv
     1. questions_db
 1. Déploiement via Docker sur le port 8000/TCP
 
+```bash
+docker build --rm -f Dockerfile -t datascientestfastapi:latest .
+docker run -d --rm --name datascientestfastapi -p 8000:8000 datascientestfastapi:latest
+```
+
+1. Commande pour lancer l'API directement sur machine de dev:
+
+```bash
+python3 -m uvicorn src.main:api --reload
+```
+
 ## API description
 
 ### User
