@@ -12,6 +12,10 @@ Datascientest-fastapi API helps you do awesome stuff. 🚀
 
 ## User
 
+Restricted to:
+* registered user
+* admin
+
 You will be able to:
 * Get current **user**.
 
@@ -22,18 +26,27 @@ You will be able to:
 
 ## Questions
 
+Restricted to:
+* admin
+
 You will be able to:
 * Get a list of all **questions**
 
 ## Question
+
+Restricted to:
+* admin
 
 You will be able to:
 * Add one **question** to existing set of questions.
 
 ## Exam
 
-Ypu will be able to:
+Restricted to:
+* registered user
+* admin
 
+You will be able to:
 * Generate a random set of questions for an **exam** with specific use and a list of associated subject(s).
 """
 
@@ -149,16 +162,28 @@ async def put_question(question: Question, username: str = Depends(get_current_u
 
 
 @api.get("/exam")
-async def get_exam(use: str, subject: str, nb: int):
-    try:
-        subject_lst = list(subject.split(","))
-        questions_db = pd.DataFrame(jsonable_encoder(questions_dict))
-        questions_lst = questions_db[
-            (questions_db["use"] == use) & (questions_db["subject"].isin(subject_lst))
+async def get_exam(
+    use: str, subject: str, nb: int, username: str = Depends(get_current_user)
+):
+    subject_lst = list(subject.split(","))
+    questions_db = pd.DataFrame(jsonable_encoder(questions_dict))
+    questions_lst = questions_db[
+        (questions_db["use"] == use) & (questions_db["subject"].isin(subject_lst))
+    ]
+    if nb > len(questions_lst):
+        nb = len(questions_lst)
+    exam_dict = (
+        questions_lst[
+            [
+                "subject",
+                "question",
+                "responseA",
+                "responseB",
+                "responseC",
+                "responseD",
+            ]
         ]
-        if nb > len(questions_lst):
-            nb = len(questions_lst)
-        exam_dict = questions_lst.sample(n=nb).to_dict(orient="records")
-        return exam_dict
-    except IndexError:
-        return {}
+        .sample(n=nb)
+        .to_dict(orient="records")
+    )
+    return exam_dict
