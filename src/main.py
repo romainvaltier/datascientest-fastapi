@@ -118,7 +118,7 @@ async def get_questions(username: str = Depends(get_current_user)):
     if username != "admin":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Only an administrator can list all questions",
+            detail="Only an administrator can list all questions.",
             headers={"WWW-Authenticate": "Basic"},
         )
     return questions_dict
@@ -137,12 +137,15 @@ class Question(BaseModel):
 
 
 @api.post("/question")
-async def put_question(question: Question):
-    try:
-        questions_dict.append(jsonable_encoder(question))
-        return question
-    except IndexError:
-        return {}
+async def put_question(question: Question, username: str = Depends(get_current_user)):
+    if username != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Only an administrator can add question.",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    questions_dict.append(jsonable_encoder(question))
+    return question
 
 
 @api.get("/exam")
