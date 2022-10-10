@@ -30,5 +30,55 @@ wget https://dst-de.s3.eu-west-3.amazonaws.com/fastapi_fr/questions.csv
 
 1. Utilisation **async** par défaut pour anticiper les besoins de performance
 1. deux bases de données seront utilisées :
-    1. user_db
+    1. users
     1. questions_db
+
+## API description
+
+### User
+
+Restricted to:
+
+* registered user
+* admin
+
+You will be able to:
+
+* Get current **user**.
+
+### Use
+
+You will be able to:
+
+* Get a list of **use** and associated **subject(s)**.
+
+### Questions
+
+Restricted to:
+
+* admin
+
+You will be able to:
+
+* Get a list of all **questions**
+
+### Question
+
+Restricted to:
+
+* admin
+
+You will be able to:
+
+* Add one **question** to existing set of questions.
+
+### Exam
+
+Restricted to:
+
+* registered user
+* admin
+
+You will be able to:
+
+* Generate a random set of questions for an **exam** with specific use and a list of associated subject(s).
