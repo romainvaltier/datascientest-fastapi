@@ -1,12 +1,13 @@
 FROM python:latest
 
-WORKDIR /src
+WORKDIR /code
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY ./requirements.txt /code/requirements.txt
 
-COPY src/main.py ./
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY ./src /code/src
 
 EXPOSE 8000/TCP
 
-CMD [ "python", "-m", "uvicorn", "main:api", "--reload" ]
+CMD [ "uvicorn", "src.main:api", "--host", "0.0.0.0", "--port", "8000" ]
