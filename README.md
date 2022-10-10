@@ -32,6 +32,7 @@ wget https://dst-de.s3.eu-west-3.amazonaws.com/fastapi_fr/questions.csv
 1. deux bases de données seront utilisées :
     1. users
     1. questions_db
+1. Déploiement via Docker sur le port 8000/TCP
 
 ## API description
 
