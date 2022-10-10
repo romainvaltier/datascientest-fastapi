@@ -57,6 +57,10 @@ users = {
         "username": "clementine",
         "hashed_password": pwd_context.hash("mandarine"),
     },
+    "admin": {
+        "username": "admin",
+        "hashed_password": pwd_context.hash("4dm1N"),
+    },
 }
 
 
@@ -89,7 +93,7 @@ async def get_index():
 
 
 @api.get("/user")
-def current_user(username: str = Depends(get_current_user)):
+async def current_user(username: str = Depends(get_current_user)):
     return "Hello {}".format(username)
 
 
@@ -110,11 +114,14 @@ async def get_use():
 
 
 @api.get("/questions")
-async def get_questions():
-    try:
-        return questions_dict
-    except IndexError:
-        return {}
+async def get_questions(username: str = Depends(get_current_user)):
+    if username != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Only an administrator can list all questions",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return questions_dict
 
 
 class Question(BaseModel):
