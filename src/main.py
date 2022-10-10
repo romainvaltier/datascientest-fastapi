@@ -56,7 +56,6 @@ security = HTTPBasic()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # user database
-# users_db = {"alice": "wonderland", "bob": "builder", "clementine": "mandarine"}
 users = {
     "alice": {
         "username": "alice",
