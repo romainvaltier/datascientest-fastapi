@@ -48,7 +48,7 @@ async def get_questions():
         return {}
 
 
-@api.get("/exam/{use}/subject/{subject}/nb/{nb}")
+@api.get("/exam")
 async def get_exam(use: str, subject: str, nb: int):
     try:
         subject_lst = list(subject.split(","))
@@ -69,9 +69,9 @@ class Question(BaseModel):
     subject: str
     use: str
     correct: str
-    responseA: str
-    responseB: str
-    responseC: str
+    responseA: Optional[str] = None
+    responseB: Optional[str] = None
+    responseC: Optional[str] = None
     responseD: Optional[str] = None
     remark: Optional[str] = None
 
